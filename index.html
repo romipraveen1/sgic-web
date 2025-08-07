@@ -203,8 +203,28 @@
       const APP_STORE_URL = "https://apps.apple.com/app/sgi-alumni/id123456789";
       const WEB_APP_URL = "https://romipraveen1.github.io/sgic-web/app";
 
-      // Get post ID from URL
+      // Get post ID from URL (handles both direct access and 404 redirects)
       function getPostIdFromUrl() {
+        // First, check if we have a redirect parameter (from 404.html)
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectPath = urlParams.get("redirect");
+
+        if (redirectPath) {
+          // Parse the redirected path
+          const pathParts = redirectPath.split("/").filter(Boolean);
+          // Path structure: /sgic-web/app/home/post/{postId}
+          if (
+            pathParts.length >= 5 &&
+            pathParts[0] === "sgic-web" &&
+            pathParts[1] === "app" &&
+            pathParts[2] === "home" &&
+            pathParts[3] === "post"
+          ) {
+            return pathParts[4];
+          }
+        }
+
+        // Fallback: check current pathname (for direct access)
         const pathParts = window.location.pathname.split("/").filter(Boolean);
         // Path structure: /sgic-web/app/home/post/{postId}
         if (
@@ -216,6 +236,7 @@
         ) {
           return pathParts[4];
         }
+
         return null;
       }
 
@@ -266,6 +287,16 @@
         const postId = getPostIdFromUrl();
         const platform = getPlatform();
         const mobile = isMobile();
+
+        // Debug logging
+        console.log("🔗 Deep Link Debug:", {
+          currentUrl: window.location.href,
+          pathname: window.location.pathname,
+          search: window.location.search,
+          postId: postId,
+          platform: platform,
+          mobile: mobile,
+        });
 
         // Update download button
         const downloadBtn = document.getElementById("downloadApp");

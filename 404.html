@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SGI Alumni - Redirecting...</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin: 0;
+      }
+      .container {
+        text-align: center;
+        padding: 2rem;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="spinner"></div>
+      <h1>SGI Alumni</h1>
+      <p>Redirecting you to the post...</p>
+    </div>
+
+    <script>
+      // GitHub Pages SPA redirect solution
+      // This script captures the current URL and redirects to index.html with the path as a parameter
+
+      const currentPath = window.location.pathname;
+      const currentSearch = window.location.search;
+      const currentHash = window.location.hash;
+
+      console.log("🚨 404 Page Accessed:", {
+        currentPath,
+        currentSearch,
+        currentHash,
+        fullUrl: window.location.href,
+      });
+
+      // Check if this looks like a deep link path
+      const pathParts = currentPath.split("/").filter(Boolean);
+      const isDeepLink =
+        pathParts.length >= 5 &&
+        pathParts[0] === "sgic-web" &&
+        pathParts[1] === "app" &&
+        pathParts[2] === "home" &&
+        pathParts[3] === "post";
+
+      if (isDeepLink) {
+        // This is a deep link, redirect to index.html with the path
+        const redirectUrl =
+          window.location.origin +
+          "/sgic-web/" +
+          "?redirect=" +
+          encodeURIComponent(currentPath + currentSearch + currentHash);
+
+        console.log("🔗 Deep link detected, redirecting to:", redirectUrl);
+        window.location.replace(redirectUrl);
+      } else {
+        // Not a deep link, just redirect to home
+        console.log("🏠 Not a deep link, redirecting to home");
+        window.location.replace(window.location.origin + "/sgic-web/");
+      }
+    </script>
+  </body>
+</html>
